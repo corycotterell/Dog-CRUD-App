@@ -1,13 +1,14 @@
 import React from "react"
 import {object} from "./data.js"
 
+
 export default class ObjDisplay extends React.Component{
     constructor(){
         super()
         this.dog = []
-        this.userInput = ""
-        // this.answer = "dog2"
-        this.state = {
+        this.options = []
+        this.currentValue = "default"
+            this.state = {
             dogOnDisplay:{
                 id:"",
                 breed:"",
@@ -22,11 +23,11 @@ export default class ObjDisplay extends React.Component{
         this.handleChange = this.handleChange.bind(this)
     }
     handleSubmit(){
-        this.displayDog(this.userInput)
+        this.displayDog(this.currentValue)
     }
     handleChange(event){
         event.persist()
-        this.userInput = event.target.value
+        this.currentValue = event.target.value
     }
     displayDog(input){
         let answer = input
@@ -40,28 +41,34 @@ export default class ObjDisplay extends React.Component{
                     kidFriendly:[item][0].kidFriendly
                  }})
              }
-                //  this.setState({
-                //  })
         }.bind(this))
+    }
+    createOptions(){
+        let select = document.getElementById("select")
+        this.state.object.dogs.forEach(element => {
+            let option = document.createElement("OPTION")
+            let text = document.createTextNode(element.id)
+            option.setAttribute("value", element.id)
+            option.appendChild(text)
+            select.insertBefore(option,select.lastChild)
+        });
+    }
+    componentDidMount(){
+        this.createOptions()
     }
     
     render(){
-        // this.displayDog()
-        // console.log(this.state.object.dogs[0].id)
         return(
             <div>
                 <h1> This Rad Dog Bro {this.state.dogOnDisplay.id} </h1>
-                <ul>
-                    <li>{this.state.dogOnDisplay.breed}</li>
-                    <li>{this.state.dogOnDisplay.size}</li>
-                    <li>{this.state.dogOnDisplay.inteligence}</li>
-                    <li>{this.state.dogOnDisplay.kidFriendly}</li>
-                </ul>
-                <form >
-                    <input type="text" onChange={this.handleChange}></input>
-                </form>
+                    <h2>{this.state.dogOnDisplay.breed}</h2>
+                    <h2>{this.state.dogOnDisplay.size}</h2>
+                    <h2>{this.state.dogOnDisplay.inteligence}</h2>
+                    <h2>{this.state.dogOnDisplay.kidFriendly}</h2>
+                <select id="select" onChange={this.handleChange}>
+                    <option value="default">default</option>
+                </select>
                 <button onClick={this.handleSubmit}>click me to submit type of dog</button>
-
             </div>
         )
     }
